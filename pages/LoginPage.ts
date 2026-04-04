@@ -1,4 +1,6 @@
-import { type Locator, type Page, expect } from '@playwright/test';
+import test, { type Locator, type Page, expect } from '@playwright/test';
+import { ERROR_MESSAGE } from '../test-data/loginPage';
+import { MenuElement } from './MenuElement';
 
 export class LoginPage {
   readonly page: Page;
@@ -21,11 +23,23 @@ export class LoginPage {
 
   async login(username: string, password: string) {
     await this.usernameInput.fill(username);
-    await this.passwordInput.fill(password);
+
+    await test.step('Fill password (hidden)', async () => {
+      await this.passwordInput.fill(password);
+    });
     await this.loginButton.click();
   }
 
   async getErrorMessage(): Promise<string> {
     return await this.errorMessage.innerText();
+  }
+
+  async expectIncorrectCredentialsErrorMessage() {
+    await expect(this.errorMessage).toHaveText(ERROR_MESSAGE.text);
+  }
+
+  async expectNotLoggedIn(logoutLink: Locator) {
+    await expect(this.page).not.toHaveURL(/.*\/inventory\.html$/, { timeout: 5000 });
+    await expect(logoutLink).not.toBeVisible();
   }
 }

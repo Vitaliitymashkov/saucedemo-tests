@@ -5,6 +5,10 @@
   "main": "index.js",
   "scripts": {
     "test": "npx playwright test",
+    "tl1": "npx playwright test -g \"standard_user logs in and logs out successfully\"",
+    "test:ui": "npx playwright test --ui",
+    "test:ui:debug": "npx playwright test --ui --debug",
+    "sr": "npx playwright show-report",
     "test:report": "npx playwright show-report"
   },
   "keywords": [],
@@ -15,5 +19,8 @@
     "@playwright/test": "^1.58.2",
     "@types/node": "^25.5.0",
     "dotenv": "^17.3.1"
+  },
+  "dependencies": {
+    "playwright": "^1.59.1"
   }
 }

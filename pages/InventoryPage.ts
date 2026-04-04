@@ -43,4 +43,8 @@ export class InventoryPage {
   async getItemNames(): Promise<string[]> {
     return await this.page.getByTestId('inventory-item-name').allInnerTexts();
   }
+
+  async expectInventoryPageIsLoaded() {
+    await expect(this.page).toHaveURL(/.*\/inventory\.html$/, { timeout: 5000 });
+  }
 }
