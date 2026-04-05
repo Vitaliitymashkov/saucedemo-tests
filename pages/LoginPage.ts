@@ -50,7 +50,7 @@ export class LoginPage {
   async expectToHaveRandomBacktraceGuid() {
     const backtraceGuid = await this.page.evaluate((key) => localStorage.getItem(key), BACKTRACE_GUID_STORAGE_KEY);
     expect(backtraceGuid).toMatch(/^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i);
-    console.log(backtraceGuid);
+    console.log(`Backtrace GUID: ${backtraceGuid}`);
   }
 
   async expectToHaveRelevantSessionUsernameCookie() {
