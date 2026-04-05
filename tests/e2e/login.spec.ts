@@ -1,7 +1,7 @@
 import { test } from '@playwright/test';
-import { LoginPage } from '../../pages/LoginPage';
-import { InventoryPage } from '../../pages/InventoryPage';
-import { MenuElement } from '../../pages/MenuElement';
+import { LoginPage } from '../../pages/Login.page';
+import { InventoryPage } from '../../pages/Inventory.page';
+import { MenuElement } from '../../pages/Menu.pageElement';
 import { STANDARD_USER, LOCKED_USER } from '../../test-data/users';
 
 let loginPage: LoginPage;

@@ -1,8 +1,8 @@
 import { test, expect } from '@playwright/test';
-import { LoginPage } from '../../pages/LoginPage';
-import { InventoryPage } from '../../pages/InventoryPage';
-import { CartPage } from '../../pages/CartPage';
-import { CheckoutPage } from '../../pages/CheckoutPage';
+import { LoginPage } from '../../pages/Login.page';
+import { InventoryPage } from '../../pages/Inventory.page';
+import { CartPage } from '../../pages/Cart.page';
+import { CheckoutPage } from '../../pages/Checkout.page';
 import { STANDARD_USER } from '../../test-data/users';
 import { BACKPACK, BACKPACK_TAX, BACKPACK_TOTAL } from '../../test-data/products';
 import { CHECKOUT_MESSAGES, checkoutDetails } from '../../test-data/checkout';

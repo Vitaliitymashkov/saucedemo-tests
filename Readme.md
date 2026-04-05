@@ -33,6 +33,9 @@ Playwright + TypeScript end-to-end test suite for [saucedemo.com](https://www.sa
 - Use the Page Object Model pattern: keep selectors and page interactions in `pages/`, tests in `tests/e2e/`.
 - Name test files `*.spec.ts`.
 - Name page objects `*.page.ts`.
+- Name page elements `*.pageElement.ts`.
+- Name test data files `*.ts`.
+- Name network utility constants files `*.utilityConstants.ts`.
 - Use `dotenv` for environment variables — copy `.env.example` to `.env` and fill in values.
 - HTML reporter is configured by default; reports go to `playwright-report/`.
 - Screenshots are captured only on failure; traces are recorded on first retry.

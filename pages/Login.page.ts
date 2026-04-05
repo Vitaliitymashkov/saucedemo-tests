@@ -1,7 +1,7 @@
 import test, { type Locator, type Page, expect } from '@playwright/test';
 import { ERROR_MESSAGE } from '../test-data/loginPage';
 import { STANDARD_USER } from '../test-data/users';
-import { BACKTRACE_GUID_STORAGE_KEY, SESSION_USERNAME_COOKIE_NAME } from './UtilityConstants';
+import { BACKTRACE_GUID_STORAGE_KEY, SESSION_USERNAME_COOKIE_NAME } from './Network.utilityConstants';
 
 export class LoginPage {
   readonly page: Page;
