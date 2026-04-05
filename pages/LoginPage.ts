@@ -25,6 +25,9 @@ export class LoginPage {
   async login(username: string, password: string) {
     await this.usernameInput.fill(username);
 
+    // NOTE: Complete hiding secrets in Playwright is not possible,
+    // so we use test.step to hide it in the report's upper level
+    // Thought, in the inner level it is still visible
     await test.step('Fill password (hidden)', async () => {
       await this.passwordInput.fill(password);
     });
