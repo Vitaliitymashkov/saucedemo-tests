@@ -45,11 +45,11 @@ test('locked_out_user sees error message', async ({ page }) => {
     await loginPage.login(LOCKED_USER.username, LOCKED_USER.password);
   });
 
-  await test.step('Step 2: Verify error message', async () => {
+  await test.step('Step 2: Verify there is an expected error message', async () => {
     await loginPage.expectIncorrectCredentialsErrorMessage();
   });
 
-  await test.step('Step 3: Verify not logged in', async () => {
+  await test.step('Step 3: Verify it is not possible to log out', async () => {
     await loginPage.expectNotLoggedIn(menuElement.logoutLink);
   });
 });
