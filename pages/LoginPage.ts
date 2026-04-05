@@ -1,6 +1,7 @@
 import test, { type Locator, type Page, expect } from '@playwright/test';
 import { ERROR_MESSAGE } from '../test-data/loginPage';
 import { STANDARD_USER } from '../test-data/users';
+import { BACKTRACE_GUID_STORAGE_KEY, SESSION_USERNAME_COOKIE_NAME } from './UtilityConstants';
 
 export class LoginPage {
   readonly page: Page;
@@ -44,13 +45,13 @@ export class LoginPage {
   }
 
   async expectToHaveRandomBacktraceGuid() {
-    const backtraceGuid = await this.page.evaluate(() => localStorage.getItem('backtrace-guid'));
+    const backtraceGuid = await this.page.evaluate(() => localStorage.getItem(BACKTRACE_GUID_STORAGE_KEY));
     expect(backtraceGuid).toMatch(/^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i);
-    console.log(backtraceGuid);    
+    console.log(backtraceGuid);
   }
 
   async expectToHaveRelevantSessionUsernameCookie() {
     const cookies = await this.page.context().cookies();
-    expect(cookies.find((c) => c.name === 'session-username')?.value).toBe(STANDARD_USER.username);
+    expect(cookies.find((c) => c.name === SESSION_USERNAME_COOKIE_NAME)?.value).toBe(STANDARD_USER.username);
   }
 }
