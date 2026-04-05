@@ -8,6 +8,14 @@ Playwright + TypeScript end-to-end test suite for [saucedemo.com](https://www.sa
 - Playwright 1.58.2+ (to install: `npm i playwright`)
 - package-lock.json should be tracked in order to run tests in CI
 
+- To set up github secrets run: `./set-github-secrets.sh`
+    - You need to be logged in to github CLI: `gh auth login` (to install: `brew install gh`)
+    - You need to have a personal access token with the following scopes: `repo`, `read:org`, `workflow`
+
+## To run tests in CI without new changes use the following command:
+    - 'git commit --allow-empty -m "Trigger GitHub Actions"'
+    - 'git push vt-origin main'
+
 ## To use Claude AI for test generation
 - Use `CLAUDE.md` for context setup and specific instructions
 
