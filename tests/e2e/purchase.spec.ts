@@ -4,51 +4,67 @@ import { InventoryPage } from '../../pages/InventoryPage';
 import { CartPage } from '../../pages/CartPage';
 import { CheckoutPage } from '../../pages/CheckoutPage';
 import { STANDARD_USER } from '../../test-data/users';
-import { BACKPACK } from '../../test-data/products';
+import { BACKPACK, BACKPACK_TAX, BACKPACK_TOTAL } from '../../test-data/products';
+import { CHECKOUT_MESSAGES, checkoutDetails } from '../../test-data/checkout';
 
-test('Complete purchase journey with price verification', async ({ page }) => {
-  const loginPage = new LoginPage(page);
-  const inventoryPage = new InventoryPage(page);
-  const cartPage = new CartPage(page);
-  const checkoutPage = new CheckoutPage(page);
+let loginPage: LoginPage;
+let inventoryPage: InventoryPage;
 
-  // Step 1: Login as standard_user
+test.beforeEach(async ({ page }) => {
+  loginPage = new LoginPage(page);
+  inventoryPage = new InventoryPage(page);
   await loginPage.goto();
   await loginPage.login(STANDARD_USER.username, STANDARD_USER.password);
 
-  // Step 2: Verify backpack price on inventory page
-  const inventoryPrice = await inventoryPage.getItemPrice(BACKPACK.name);
-  expect(inventoryPrice).toBe(BACKPACK.price);
+});
 
-  // Step 3: Add backpack to cart
-  await inventoryPage.addToCartByName(BACKPACK.name);
+test('Complete purchase journey with checkout and price verifications', async ({ page }) => {
+  const cartPage = new CartPage(page);
+  const checkoutPage = new CheckoutPage(page);
 
-  // Step 4: Go to cart page
-  await cartPage.goto();
+  await test.step('Step 1: Verify backpack price on inventory page', async () => {
+    const inventoryPrice = await inventoryPage.getItemPrice(BACKPACK.name);
+    expect(inventoryPrice).toBe(BACKPACK.price);
+  });
 
-  // Step 5: Verify cart contains exactly 1 item named "Sauce Labs Backpack"
-  await expect(cartPage.cartItems).toHaveCount(1);
-  const cartItemNames = await cartPage.getItemNames();
-  expect(cartItemNames).toEqual([BACKPACK.name]);
+  await test.step('Step 2: Add backpack to cart', async () => {
+    await inventoryPage.addToCartByName(BACKPACK.name);
+  });
 
-  // Step 6: Verify cart item price
-  const cartPrice = await cartPage.getItemPrice(BACKPACK.name);
-  expect(cartPrice).toBe(BACKPACK.price);
+  await test.step('Step 3: Go to cart page', async () => {
+    await cartPage.goto();
+  });
 
-  // Step 7: Click checkout
-  await cartPage.clickCheckout();
+  await test.step(`Step 4: Verify cart contains exactly 1 item named "${BACKPACK.name}"`, async () => {
+    await expect(cartPage.cartItems).toHaveCount(1);
+    const cartItemNames = await cartPage.getItemNames();
+    expect(cartItemNames).toEqual([BACKPACK.name]);
+  })
 
-  // Step 8: Fill checkout info
-  await checkoutPage.fillInfo('Test', 'User', '12345');
+  await test.step('Step 5: Verify cart item price', async () => {
+    const cartPrice = await cartPage.getItemPrice(BACKPACK.name);
+    expect(cartPrice).toBe(BACKPACK.price);
+  });
 
-  // Step 9: Verify checkout overview totals
-  await expect(checkoutPage.subtotalLabel).toContainText(BACKPACK.price);
-  await expect(checkoutPage.taxLabel).toContainText('$2.40');
-  await expect(checkoutPage.totalPriceLabel).toContainText('$32.39');
+  await test.step('Step 6: Go to checkout page', async () => {
+    await cartPage.goToCheckoutPage();
+  });
 
-  // Step 10: Click Finish
-  await checkoutPage.finish();
+  await test.step('Step 7: Fill checkout info', async () => {
+    await checkoutPage.fillCheckoutInfo(checkoutDetails);
+  });
 
-  // Step 11: Verify completion message
-  await expect(checkoutPage.completeHeader).toHaveText('Thank you for your order!');
+  await test.step('Step 8: Verify checkout overview totals', async () => {
+    await expect(checkoutPage.subtotalLabel).toContainText(BACKPACK.price);
+    await expect(checkoutPage.taxLabel).toContainText(BACKPACK_TAX.toFixed(2));
+    await expect(checkoutPage.totalPriceLabel).toContainText(BACKPACK_TOTAL.toFixed(2));
+  });
+
+  await test.step('Step 9: Click Finish', async () => {
+    await checkoutPage.finish();
+  });
+
+  await test.step('Step 10: Verify completion message', async () => {
+    await expect(checkoutPage.completeHeader).toHaveText(CHECKOUT_MESSAGES.completeHeader);
+  });
 });

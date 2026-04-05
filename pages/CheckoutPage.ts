@@ -27,10 +27,10 @@ export class CheckoutPage {
     this.completeHeader = page.getByTestId('complete-header');
   }
 
-  async fillInfo(firstName: string, lastName: string, postalCode: string) {
-    await this.firstNameInput.fill(firstName);
-    await this.lastNameInput.fill(lastName);
-    await this.postalCodeInput.fill(postalCode);
+  async fillCheckoutInfo(checkoutDetails: { firstName: string; lastName: string; postalCode: string }) {
+    await this.firstNameInput.fill(checkoutDetails.firstName);
+    await this.lastNameInput.fill(checkoutDetails.lastName);
+    await this.postalCodeInput.fill(checkoutDetails.postalCode);
     await this.continueButton.click();
   }
 

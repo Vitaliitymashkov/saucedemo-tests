@@ -28,7 +28,7 @@ export class CartPage {
     return await item.getByTestId('inventory-item-price').innerText();
   }
 
-  async clickCheckout() {
+  async goToCheckoutPage() {
     await this.checkoutButton.click();
   }
 
