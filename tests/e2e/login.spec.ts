@@ -24,20 +24,32 @@ test.beforeEach(async ({ page }) => {
 // 2) backtrace guid is set in the proper format, 
 // 3) logout menu item is visible and operational
 test('standard_user logs in and logs out successfully', async ({ page }) => {
-  await loginPage.login(STANDARD_USER.username, STANDARD_USER.password);
+  await test.step('Step 1: Enter credentials of active user', async () => {
+    await loginPage.login(STANDARD_USER.username, STANDARD_USER.password);
+  });
 
-  await inventoryPage.expectInventoryPageIsLoaded();
+  await test.step('Step 2: Verify inventory page is loaded', async () => {
+    await inventoryPage.expectInventoryPageIsLoaded();
+  });
 
   // NOTE: HERE IT IS EXPECTED TO HAVE 2 ERRORS IN CONSOLE - WILL NOT BE FIXED
   // https://events.backtrace.io/api/summed-events/submit?universe=UNIVERSE&token=TOKEN
   // Status Code	 401 Unauthorized
-  await menuElement.expectLogoutMenuItemIsVisible();
+  await test.step('Step 3: Verify logout menu item is visible', async () => {
+    await menuElement.expectLogoutMenuItemIsVisible();
+  });
 
-  await loginPage.expectToHaveRandomBacktraceGuid();
+  await test.step('Step 4: Verify backtrace guid is set', async () => {
+    await loginPage.expectToHaveRandomBacktraceGuid();
+  });
 
-  await loginPage.expectToHaveRelevantSessionUsernameCookie();
+  await test.step('Step 5: Verify session username cookie is properly set', async () => {
+    await loginPage.expectToHaveRelevantSessionUsernameCookie();
+  });
 
-  await menuElement.clickLogoutAndReturnToIndexPage();
+  await test.step('Step 6: Click logout and return to index page', async () => {
+    await menuElement.clickLogoutAndReturnToIndexPage();
+  });
 });
 
 test('locked_out_user sees error message', async ({ page }) => {
