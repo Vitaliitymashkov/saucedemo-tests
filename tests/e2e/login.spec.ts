@@ -19,8 +19,8 @@ test.beforeEach(async ({ page }) => {
 // as it is not a part of a login functionality
 // REMOVED: await expect(inventoryPage.inventoryItems.first()).toBeVisible(); 
 // 
-// Instead, I propose looking if 
-// 1) session cookie is set, 
+// Instead, I propose looking if:
+// 1) session cookie is set and username is similar to the one used for login,
 // 2) backtrace guid is set in the proper format, 
 // 3) logout menu item is visible and operational
 test('standard_user logs in and logs out successfully', async ({ page }) => {
