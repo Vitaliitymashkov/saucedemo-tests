@@ -41,8 +41,15 @@ test('standard_user logs in and logs out successfully', async ({ page }) => {
 });
 
 test('locked_out_user sees error message', async ({ page }) => {
-  await loginPage.login(LOCKED_USER.username, LOCKED_USER.password);
+  await test.step('Step 1: Enter credentials of locked out user', async () => {
+    await loginPage.login(LOCKED_USER.username, LOCKED_USER.password);
+  });
 
-  await loginPage.expectIncorrectCredentialsErrorMessage();
-  await loginPage.expectNotLoggedIn(menuElement.logoutLink);
+  await test.step('Step 2: Verify error message', async () => {
+    await loginPage.expectIncorrectCredentialsErrorMessage();
+  });
+
+  await test.step('Step 3: Verify not logged in', async () => {
+    await loginPage.expectNotLoggedIn(menuElement.logoutLink);
+  });
 });
