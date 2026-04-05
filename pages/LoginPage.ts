@@ -1,6 +1,6 @@
 import test, { type Locator, type Page, expect } from '@playwright/test';
 import { ERROR_MESSAGE } from '../test-data/loginPage';
-import { MenuElement } from './MenuElement';
+import { STANDARD_USER } from '../test-data/users';
 
 export class LoginPage {
   readonly page: Page;
@@ -41,5 +41,16 @@ export class LoginPage {
   async expectNotLoggedIn(logoutLink: Locator) {
     await expect(this.page).not.toHaveURL(/.*\/inventory\.html$/, { timeout: 5000 });
     await expect(logoutLink).not.toBeVisible();
+  }
+
+  async expectToHaveRandomBacktraceGuid() {
+    const backtraceGuid = await this.page.evaluate(() => localStorage.getItem('backtrace-guid'));
+    expect(backtraceGuid).toMatch(/^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i);
+    console.log(backtraceGuid);    
+  }
+
+  async expectToHaveRelevantSessionUsernameCookie() {
+    const cookies = await this.page.context().cookies();
+    expect(cookies.find((c) => c.name === 'session-username')?.value).toBe(STANDARD_USER.username);
   }
 }

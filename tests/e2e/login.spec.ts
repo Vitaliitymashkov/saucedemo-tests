@@ -1,4 +1,4 @@
-import { test, expect } from '@playwright/test';
+import { test } from '@playwright/test';
 import { LoginPage } from '../../pages/LoginPage';
 import { InventoryPage } from '../../pages/InventoryPage';
 import { MenuElement } from '../../pages/MenuElement';
@@ -15,18 +15,27 @@ test.beforeEach(async ({ page }) => {
   await loginPage.goto();
 });
 
+// NOTE: I propose removing assertion on InventoryList,
+// as it is not a part of a login functionality
+// REMOVED: await expect(inventoryPage.inventoryItems.first()).toBeVisible(); 
+// 
+// Instead, I propose looking if 
+// 1) session cookie is set, 
+// 2) backtrace guid is set in the proper format, 
+// 3) logout menu item is visible and operational
 test('standard_user logs in and logs out successfully', async ({ page }) => {
   await loginPage.login(STANDARD_USER.username, STANDARD_USER.password);
 
   await inventoryPage.expectInventoryPageIsLoaded();
 
-  // TODO: I would rather remove this assertion, because it is not needed
-  // await expect(inventoryPage.inventoryItems.first()).toBeVisible(); 
-
-  // NOTE: EXPECTED TO HAVE 2 ERRORS IN CONSOLE - WILL NOT BE FIXED
+  // NOTE: HERE IT IS EXPECTED TO HAVE 2 ERRORS IN CONSOLE - WILL NOT BE FIXED
   // https://events.backtrace.io/api/summed-events/submit?universe=UNIVERSE&token=TOKEN
   // Status Code	 401 Unauthorized
   await menuElement.expectLogoutMenuItemIsVisible();
+
+  await loginPage.expectToHaveRandomBacktraceGuid();
+
+  await loginPage.expectToHaveRelevantSessionUsernameCookie();
 
   await menuElement.clickLogoutAndReturnToIndexPage();
 });
